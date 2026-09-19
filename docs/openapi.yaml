@@ -1,0 +1,126 @@
+openapi: 3.1.0
+info:
+  title: SENTINEL-X API
+  version: 4.0.0
+  description: Evidence-first security investigation and controlled-response platform (simulation mode).
+servers:
+  - url: http://127.0.0.1:4173
+paths:
+  /api/health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Service healthy
+  /api/session:
+    get:
+      summary: Session and demo CSRF token
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Session info
+  /api/dashboard:
+    get:
+      summary: Command center posture
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Analyses and briefing
+  /api/analyze/{scenarioId}:
+    get:
+      summary: Full analysis for scenario
+      parameters:
+        - name: scenarioId
+          in: path
+          required: true
+          schema: { type: string }
+        - name: step
+          in: query
+          schema: { type: integer }
+      security: [{ bearerAuth: [], demoToken: [] }]
+      responses:
+        '200':
+          description: Analysis payload
+  /api/simulate/{scenarioId}/reset:
+    post:
+      summary: Reset demo scenario replay
+      security: [{ bearerAuth: [], demoToken: [] }]
+      responses:
+        '200':
+          description: Reset complete
+  /api/simulate/{scenarioId}/step:
+    post:
+      summary: Ingest next demo event
+      security: [{ bearerAuth: [], demoToken: [] }]
+      responses:
+        '200':
+          description: Step processed
+  /api/investigate:
+    post:
+      summary: Evidence-grounded investigation Q&A
+      security: [{ bearerAuth: [], demoToken: [] }]
+      responses:
+        '200':
+          description: Answer with citations
+  /api/actions:
+    post:
+      summary: Approve or reject simulated response
+      security: [{ bearerAuth: [], demoToken: [] }]
+      responses:
+        '201':
+          description: Action recorded
+  /api/feedback:
+    post:
+      summary: Analyst feedback for learning
+      security: [{ bearerAuth: [], demoToken: [] }]
+      responses:
+        '201':
+          description: Feedback stored
+  /api/report/{scenarioId}/{format}:
+    get:
+      summary: Export incident report (json|csv|pdf|html)
+      parameters:
+        - name: scenarioId
+          in: path
+          required: true
+          schema: { type: string }
+        - name: format
+          in: path
+          schema: { type: string, enum: [json, csv, pdf, html] }
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Report bytes
+  /api/model-ops/train:
+    post:
+      summary: Train Isolation Forest candidate
+      security: [{ bearerAuth: [], demoToken: [] }]
+      responses:
+        '201':
+          description: Model trained
+  /api/v1/telemetry/events:
+    post:
+      summary: Authenticated real telemetry ingest
+      security: [{ telemetryBearer: [] }]
+      responses:
+        '201':
+          description: Event ingested
+  /api/metrics:
+    get:
+      summary: Prometheus metrics
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: text/plain metrics
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+    demoToken:
+      type: apiKey
+      in: header
+      name: X-Sentinel-Demo-Token
+    telemetryBearer:
+      type: http
+      scheme: bearer

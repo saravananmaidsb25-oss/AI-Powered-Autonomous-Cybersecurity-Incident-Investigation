@@ -1,0 +1,6 @@
+[
+  {"scenarioId":"account","expectedThreat":true,"label":"Account compromise sequence"},
+  {"scenarioId":"lateral","expectedThreat":true,"label":"Lateral movement sequence"},
+  {"scenarioId":"transfer","expectedThreat":true,"label":"Suspicious transfer sequence"},
+  {"scenarioId":"account","step":0,"expectedThreat":false,"label":"No observed evidence"}
+]

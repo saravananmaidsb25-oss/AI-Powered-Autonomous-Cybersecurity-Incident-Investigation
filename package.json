@@ -1,0 +1,25 @@
+{
+  "name": "sentinel-x",
+  "version": "4.0.0",
+  "description": "Evidence-first local cybersecurity investigation simulation",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/acceptance.test.js test/requirements.test.js test/production-readiness.test.js test/platform-enhancements.test.js test/live-platform.test.js test/jury-evaluation.test.js",
+    "test:e2e": "playwright test",
+    "test:all": "npm test && playwright test",
+    "backup": "node scripts/backup.js",
+    "eval:model": "node scripts/evaluate-model.js",
+    "benchmark": "node scripts/benchmark.js",
+    "playwright:install": "playwright install chromium",
+    "playwright:mcp": "npx -y @playwright/mcp@latest"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "devDependencies": {
+    "@playwright/mcp": "^0.0.82",
+    "@playwright/test": "^1.63.0"
+  }
+}

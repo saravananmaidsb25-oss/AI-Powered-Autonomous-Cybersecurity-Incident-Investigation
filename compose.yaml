@@ -1,0 +1,27 @@
+services:
+  sentinel-x:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:4173:4173"
+    environment:
+      PORT: "4173"
+      SENTINEL_X_HOST: "0.0.0.0"
+      SENTINEL_X_ALLOW_NETWORK: "1"
+      SENTINEL_X_RETENTION_DAYS: "365"
+      SENTINEL_X_RATE_LIMIT: "120"
+      SENTINEL_X_REQUEST_TIMEOUT_MS: "15000"
+    volumes:
+      - sentinel_data:/app/data
+      - ./backups:/app/backups
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+volumes:
+  sentinel_data:
